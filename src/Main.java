@@ -41,4 +41,38 @@ public class Main {
         return cur + sumOfPowers2(n - 1, b, cur * b);
     }
 
+    //4
+    //Time complexity is O(n), function call itself n times inputting and printing values
+    //Space complexity is O(n) each recursive call takes place in stack
+    public static void reverse(int n, Scanner sc){
+        if (n==0) return;
+        int x = sc.nextInt();
+        reverse(n-1, sc);
+        System.out.print(x + " ");
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        //1
+        System.out.println("n:");
+        int n = sc.nextInt();
+        System.out.println(sumOfSquares(n));
+        //2
+        System.out.println("n1:");
+        int n1 = sc.nextInt();
+        int[] arr = {1,2,3,4,5,6,7,8,9};
+        System.out.println(sumOfElements(arr,n1));
+        //3
+        System.out.println("n2:");
+        int n2 = sc.nextInt();
+        System.out.println("b:");
+        int b = sc.nextInt();
+        System.out.println(sumOfPowers1(n2,b));
+        System.out.println(sumOfPowers2(n2,b,1));
+        //4
+        System.out.println("n3:");
+        int n3 = sc.nextInt();
+        System.out.println("Enter sequence");
+        reverse(n3,sc);
+    }
 }
