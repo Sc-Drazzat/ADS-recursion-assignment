@@ -1,78 +1,194 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    //1
-    public static int sumOfSquares(int n) {
-        //Time complexity is O(n), function call itself n times from n to 1
-        //Space complexity is O(n) each recursive call takes place in stack, starting from n to 1
-        if (n == 0) return 0;
-        return n * n + sumOfSquares(n - 1);
-    }
-
-    //2
-    public static int sumOfElements(int[] array, int n) {
-        //Time complexity is O(n), function call itself n times from element arr[n-1] to arr[0]
-        //Space complexity is O(n) each recursive call takes place in stack, starting element arr[n-1] to arr[0]
-        if (n == 0) return 0;
-        return array[n - 1] + sumOfElements(array, n - 1);
-    }
-
-    //3 Two ways to solve
-    // first
-    //Time complexity is O(n^2), function call itself n times and in each call use pow() function which take O(n) time
-    // pow() function is inside of sumOfPowers so it is n*n = n^2 time
-    //Space complexity is O(n) each recursive call takes place in stack, each pow() takes place too, but it completes and clears stack
-    // before next recursion
-    public static int sumOfPowers1(int n, int b) {
-        if (n == 0) return 1;
-        return pow(n, b) + sumOfPowers1(n - 1, b);
-    }
-
-    public static int pow(int n, int b) {
-        if (n == 0) return 1;
-        return b * pow(n - 1, b);
-    }
-
-    // second
-    //Time complexity is O(n), function call itself n times calculating from power n to power 0
-    //Space complexity is O(n) each recursive call takes place in stack
-    public static int sumOfPowers2(int n, int b, int cur) {
-        if (n == 0) return cur;
-        return cur + sumOfPowers2(n - 1, b, cur * b);
-    }
-
-    //4
-    //Time complexity is O(n), function call itself n times inputting and printing values
-    //Space complexity is O(n) each recursive call takes place in stack
-    public static void reverse(int n, Scanner sc){
-        if (n==0) return;
-        int x = sc.nextInt();
-        reverse(n-1, sc);
-        System.out.print(x + " ");
-    }
-
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        //1
-        System.out.println("n:");
-        int n = sc.nextInt();
-        System.out.println(sumOfSquares(n));
-        //2
-        System.out.println("n1:");
-        int n1 = sc.nextInt();
-        int[] arr = {1,2,3,4,5,6,7,8,9};
-        System.out.println(sumOfElements(arr,n1));
-        //3
-        System.out.println("n2:");
-        int n2 = sc.nextInt();
-        System.out.println("b:");
-        int b = sc.nextInt();
-        System.out.println(sumOfPowers1(n2,b));
-        System.out.println(sumOfPowers2(n2,b,1));
-        //4
-        System.out.println("n3:");
-        int n3 = sc.nextInt();
-        System.out.println("Enter sequence");
-        reverse(n3,sc);
+        System.out.println("Task 1");
+        integerPosition();
+        System.out.println("Task 2");
+        changeArray();
+        System.out.println("Task 3");
+        bookshelfOperation();
+        System.out.println("Task 4");
+        Stack<Integer> stack = new Stack<>();
+        stack.push(3);
+        stack.push(4);
+        stack.push(8);
+        stack.push(10);
+        stack.push(31);
+        reverseStack(stack);
+        System.out.println(stack);
+
+        System.out.println("Task 5");
+        int[] students = {1,1,1,0,0,1}, samsas = {1,0,0,0,1,1};
+        System.out.println(canteenAitu(students,samsas));
+        int[] studentss = {1,1,0,0}, sandwiches = {0,1,0,1};
+
+        System.out.println("Task 6");
+        int[] arr = {10,7,8,5,3,12,2};
+        buildMinHeap(arr);
+        System.out.println(Arrays.toString(arr));
+    }
+    //Time O(n+q) loop
+     // Space O(n) creating array
+    public static void integerPosition(){
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<ArrayList<Integer>> matrix= new ArrayList<>();
+        int n = scanner.nextInt();
+        for (int i = 0; i < n; i++){
+            int k = scanner.nextInt();
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int j = 0; j < k; j++){
+                row.add(scanner.nextInt());
+            }
+            matrix.add(row);
+        }
+
+        int q = scanner.nextInt();
+
+        ArrayList<int[]> queries = new ArrayList<>();
+        for (int i = 0; i < q; i++){
+            int[] query = new int[2];
+            query[0] = scanner.nextInt()-1;
+            query[1] = scanner.nextInt()-1;
+            queries.add(query);
+        }
+
+
+        for (int i = 0; i < q; i++){
+            int[] curque = queries.get(i);
+            if (matrix.get(curque[0]).size() < curque[1]+1){
+                System.out.println("ERROR!");
+            }
+            else {
+                System.out.println(matrix.get(curque[0]).get(curque[1]));
+            }
+        }
+    }
+    //Time O(n^2) loop and insert can be insertion to the beginnig which means shifting all elements
+    // Space O(n) creating array
+    public static void changeArray(){
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Integer> arrayList = new ArrayList<>();
+        int n = scanner.nextInt();
+        for (int i = 0; i < n; i++){
+            arrayList.add(scanner.nextInt());
+        }
+        int q = scanner.nextInt();
+        for (int i = 0; i < q; i++) {
+            String query = scanner.next();
+            if (query.equals("Insert")){
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                arrayList.add(x, y);
+            }
+            else {
+                arrayList.remove(scanner.nextInt());
+            }
+        }
+        for (int elements : arrayList){
+            System.out.print(elements + " ");
+        }
+    }
+    //Time O(n) loop
+    // Space O(n) creating linked list
+    public static void bookshelfOperation(){
+        Scanner scanner = new Scanner(System.in);
+        LinkedList<Integer> bookshelf = new LinkedList<>();
+        int n = scanner.nextInt();
+        int q;
+        int val;
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            q = scanner.nextInt();
+            switch (q) {
+                case 1:
+                    val = scanner.nextInt();
+                    bookshelf.addFirst(val);
+                    break;
+                case 2:
+                    val = scanner.nextInt();
+                    bookshelf.addLast(val);
+                    break;
+                case 3:
+                    result.append(bookshelf.removeFirst()).append(" ");
+                    break;
+                case 4:
+                    result.append(bookshelf.removeLast()).append(" ");
+                    break;
+            }
+        }
+        System.out.println(result);
+    }
+    //Time O(n^2) Insert at bottom O(n) n*n=n^2
+    // Space O(n) recursion take space
+    public static void reverseStack(Stack<Integer> stack){
+        if (stack.isEmpty()) return;
+        int x = stack.pop();
+        reverseStack(stack);
+        insertAtBottom(stack,x);
+    }
+    //Time O(n)
+    // Space O(n)
+    public static void insertAtBottom(Stack<Integer> stack, int element){
+        if (stack.isEmpty()) {
+            stack.push(element);
+            return;
+        }
+        int top = stack.pop();
+        insertAtBottom(stack, element);
+        stack.push(top);
+    }
+    //Time O(n) loop
+    // Space O(1) nothing created
+    public static int canteenAitu(int[] students, int[] samsas){
+        int n = students.length;
+        int count0 = 0, count1 = 0;
+        for (int i = 0; i < n; i++) {
+            switch (students[i]){
+                case 0:
+                    count0++;
+                    break;
+                case 1:
+                    count1++;
+                    break;
+            }
+        }
+        n = samsas.length;
+        for (int i = 0; i < n; i++) {
+            if (samsas[i] == 0){
+                if (count0 == 0) break;
+                count0--;
+            }
+            else{
+                if (count1 == 0) break;
+                count1--;
+            }
+        }
+        return count0 + count1;
+    }
+    //Time O(logn)
+    // Space O(logn)
+    public static void heapify(int[] arr, int n, int i){
+        int smallest = i;
+        int left = 2*i+1;
+        int right = 2*i+2;
+
+        if (left < n && arr[left] < arr[smallest]) smallest = left;
+        if (right < n && arr[right] < arr[smallest]) smallest = right;
+
+        if (smallest != i){
+            int temp = arr[i];
+            arr[i] = arr[smallest];
+            arr[smallest] = temp;
+            heapify(arr, n, smallest);
+        }
+    }
+    //Time O(n)
+    //Space O(logn)
+    public static void buildMinHeap(int[] arr){
+        int n = arr.length;
+        for (int i = n/2-1; i >= 0; i-- ){
+            heapify(arr, n, i);
+        }
     }
 }
